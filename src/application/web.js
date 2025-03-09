@@ -1,5 +1,3 @@
 import express from 'express';
 
-const web = express();
-
-export default web;
+export const web = express();
