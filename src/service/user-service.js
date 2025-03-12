@@ -1,5 +1,5 @@
 import { prismaClient } from "../application/database.js"
-import { ResponseErorr } from "../error/response-error"
+import { ResponseErorr } from "../error/response-error.js"
 import { registerUserValidation } from "../validation/user-validation.js"
 import { validate } from "../validation/validation.js"
 import bcrypt from "bcryptjs"
@@ -9,7 +9,9 @@ const register = async (req) =>{
 
 
     const userFind = await prismaClient.user.count({
-        where : user.username
+        where : {
+            username : user.username
+        }
     })
 
     if(userFind === 1){
