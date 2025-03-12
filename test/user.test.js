@@ -15,7 +15,30 @@ describe('POST api/users', ()=>{
                 username : 'Chairuly',
                 password :'rahasiaa'
             })
-            
+
             expect(result.status).toBe(200)
+            expect(result.body.data.username).toBe('Chairuly')
+    })
+
+    it('must be able to refuse if the registered username is invalid',async ()=>{
+        const result = await supertest(web)
+            .post('/api/users')
+            .send({
+                username : '',
+                password : 'rahasiaa'
+            })
+
+            expect(result.status).toBe(400)
+    })
+
+    it('must be able to refuse if the registered password is invalid', async()=>{
+        const result = await supertest(web)
+            .post('/api/users')
+            .send({
+                username : 'Chairuly',
+                password : ''
+            })
+
+            expect(result.status).toBe(400)
     })
 })
