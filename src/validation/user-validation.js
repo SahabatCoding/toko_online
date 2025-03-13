@@ -12,5 +12,6 @@ const loginUserValidation = Joi.object({
 
 
 export {
-    registerUserValidation
+    registerUserValidation,
+    loginUserValidation
 }

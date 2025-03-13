@@ -12,6 +12,19 @@ const register = async (req, res, next) =>{
     }
 }
 
+const login = async(req, res, next)=>{
+    try {
+        const user = req.body
+        const result = await userService.login(user)
+        res.status(200).json({
+            data : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export default{
-    register
+    register,
+    login
 }

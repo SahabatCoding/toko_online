@@ -1,8 +1,8 @@
 import supertest from "supertest"
 import { web } from "../src/application/web.js"
-import { removeUserTest } from "./test-util.js"
+import { createUserTest, removeUserTest } from "./test-util.js"
 
-describe('POST api/users', ()=>{
+describe('POST /api/users', ()=>{
     
     afterEach(async ()=>{
         await removeUserTest()
@@ -42,3 +42,25 @@ describe('POST api/users', ()=>{
             expect(result.status).toBe(400)
     })
 })
+
+ describe('POST /api/users/login',()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+    })
+
+    afterEach(async()=>{
+        await removeUserTest()
+    })
+
+    it('should be able to log in as user', async()=>{
+        const result = await supertest(web)
+            .post('/api/users/login')
+            .send({
+                username : 'Chairuly',
+                password : 'rahasiaa'
+            })
+
+            expect(result.status).toBe(200)
+            expect(result.body.data.token).toBeDefined()
+    })
+ })
