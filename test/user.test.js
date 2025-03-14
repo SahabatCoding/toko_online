@@ -20,7 +20,7 @@ describe('POST /api/users', ()=>{
             expect(result.body.data.username).toBe('Chairuly')
     })
 
-    it('must be able to refuse if the registered username is invalid',async ()=>{
+    it('should reject if username registration is wrong',async ()=>{
         const result = await supertest(web)
             .post('/api/users')
             .send({
@@ -31,7 +31,7 @@ describe('POST /api/users', ()=>{
             expect(result.status).toBe(400)
     })
 
-    it('must be able to refuse if the registered password is invalid', async()=>{
+    it('should reject if password registration is wrong', async()=>{
         const result = await supertest(web)
             .post('/api/users')
             .send({
@@ -52,7 +52,7 @@ describe('POST /api/users', ()=>{
         await removeUserTest()
     })
 
-    it('should be able to log in as user', async()=>{
+    it('should can login users', async()=>{
         const result = await supertest(web)
             .post('/api/users/login')
             .send({
@@ -63,4 +63,27 @@ describe('POST /api/users', ()=>{
             expect(result.status).toBe(200)
             expect(result.body.data.token).toBeDefined()
     })
+
+    it('should reject if username is wrong',async ()=>{
+        const result = await supertest(web)
+            .post('/api/users/login')
+            .send({
+                username : 'sagdogs',
+                password : 'rahasiaa'
+            }) 
+
+        expect(result.status).toBe(401)
+    })
+
+    it('should reject if password is wrong when logging in', async()=>{
+        const result = await supertest(web)
+            .post('/api/users/login')
+            .send({
+                username : 'Chairuly',
+                password : 'salah'
+            })
+
+            expect(result.status).toBe(401)
+    })
+
  })
