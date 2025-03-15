@@ -87,3 +87,31 @@ describe('POST /api/users', ()=>{
     })
 
  })
+
+ describe('GET /api/users/current', ()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+    })
+
+    afterEach(async()=>{
+        await removeUserTest()
+    })
+
+    it('should can get users',async()=>{
+        const result = await supertest(web)
+            .get('/api/users/current')
+            .set('Authorization', 'test')
+            
+            console.log(result.body)
+            expect(result.status).toBe(200)
+            expect(result.body.data.username).toBe('Chairuly')
+    })
+
+    it('should reject if get users is wrong', async()=>{
+        const result = await supertest(web)
+            .get('/api/users/current')
+            .set('Authorization', 'salah')
+
+            expect(result.status).toBe(401)
+    })
+ })
