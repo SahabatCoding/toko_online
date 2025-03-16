@@ -115,3 +115,36 @@ describe('POST /api/users', ()=>{
             expect(result.status).toBe(401)
     })
  })
+
+ describe('PATCH /api/users/current',()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+    })
+
+    afterEach(async()=>{
+        await removeUserTest()
+    })
+
+    it('should can update users', async()=>{
+        const result = await supertest(web)
+            .patch('/api/users/current')
+            .set('Authorization', 'test')
+            .send({
+                password : 'RahasiaBanget'
+            })
+
+        expect(result.status).toBe(200)
+        expect(result.body.data.username).toBe('Chairuly')
+    })
+
+    it('should reject if update is wrong', async()=>{
+        const result = await supertest(web)
+            .patch('/api/users/current')
+            .set('Authorization', 'test')
+            .send({
+                password : 'salah'
+            })
+
+            expect(result.status).toBe(400)
+    })
+ })

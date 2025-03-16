@@ -92,7 +92,7 @@ const update = async (req) =>{
         }
     })
 
-    if(countUser === 1){
+    if(countUser !== 1){
         throw new ResponseErorr(404, 'username is not found')
     }
 
