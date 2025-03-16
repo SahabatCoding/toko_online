@@ -148,3 +148,30 @@ describe('POST /api/users', ()=>{
             expect(result.status).toBe(400)
     })
  })
+
+ describe('DELETE /api/users/current/delete', ()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+    })
+
+    afterEach(async()=>{
+        await removeUserTest()
+    })
+
+    it('should can logout users',async()=>{
+        const result = await supertest(web)
+            .delete('/api/users/current/logout')
+            .set('Authorization','test')
+
+        expect(result.status).toBe(200)
+        expect(result.body.data.username).toBe('Chairuly')
+    })
+
+    it('should reject if logout is wrong', async()=>{
+        const result = await supertest(web)
+            .delete('/api/users/current/logout')
+            .set('Authorization', 'salah')
+        
+        expect(result.status).toBe(401)
+    })
+ })
