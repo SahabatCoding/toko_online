@@ -114,9 +114,37 @@ const update = async (req) =>{
 
 }
 
+const logout = async (username)=> {
+    username = validate(getUserValidation, username)
+
+    const countUser = await prismaClient.user.count({
+        where :{
+            username : username
+        }
+    })
+
+    if(countUser !== 1 ){
+        throw new ResponseErorr(404, 'username is not found')
+    }
+
+    return prismaClient.user.update({
+        where :{
+            username : username
+        },
+        data : {
+            token : null
+        },
+        select : {
+            username : true
+        }
+    })
+    
+}
+
 export default{
     register,
     login,
     get,
-    update
+    update,
+    logout
 }
