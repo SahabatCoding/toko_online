@@ -14,7 +14,8 @@ const create = async(user, req)=>{
             first_name : true,
             last_name : true,
             email : true,
-            phone : true
+            phone : true,
+            username : true
         }
     })
 }
