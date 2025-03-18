@@ -13,6 +13,21 @@ const create = async (req, res, next)=>{
     }
 }
 
+const get = async(req, res, next)=>{
+    try {
+        const username = req.user.username
+        const contactId = req.params.contactId
+        const result = await contactService.get(username, contactId)
+        res.status(200).json({
+            data : result
+        })
+    } catch (error) {
+        next(error)
+        
+    }
+}
+
 export default{
-    create
+    create,
+    get
 }
