@@ -1,5 +1,5 @@
 import supertest from "supertest"
-import { createUserTest, removeContactTest, removeUserTest } from "./test-util.js"
+import { createContactTest, createUserTest, findContactTest, removeContactTest, removeUserTest } from "./test-util.js"
 import { web } from "../src/application/web.js"
 
 describe('POST /api/contacts',()=>{
@@ -60,3 +60,52 @@ describe('POST /api/contacts',()=>{
     })
 
 })
+
+describe('GET /api/contacts/:contactId',()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+        await createContactTest()
+    })
+
+    afterEach(async()=>{
+        await removeContactTest()
+        await removeUserTest()
+    })
+
+    it('should can get user',async()=>{
+        const contactId = await findContactTest()
+        const result = await supertest(web)
+            .get(`/api/contacts/` + `${contactId.id}`)
+            .set('Authorization', 'test')
+
+            console.log(result.body)
+            expect(result.status).toBe(200)
+            expect(result.body.data.first_name).toBe('Chairul')
+            expect(result.body.data.last_name).toBe('Yusuf')
+            expect(result.body.data.email).toBe('chairul@gmail.com')
+            expect(result.body.data.phone).toBe('089123456')
+            expect(result.body.data.username).toBe('Chairuly')
+            
+        })
+        it('should reject if get user contactId not number ',async()=>{
+            const contactId = await findContactTest()
+            const result = await supertest(web)
+                .get(`/api/contacts/` + `salah`)
+                .set('Authorization', 'test')
+    
+                console.log(result.body)
+                expect(result.status).toBe(400)
+                
+            })
+
+            it('should reject if get user contactId is wrong ',async()=>{
+                const contactId = await findContactTest()
+                const result = await supertest(web)
+                    .get(`/api/contacts/` + `38`)
+                    .set('Authorization', 'test')
+        
+                    console.log(result.body)
+                    expect(result.status).toBe(401)
+                    
+                })
+    })

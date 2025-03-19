@@ -16,6 +16,7 @@ describe('POST /api/users', ()=>{
                 password :'rahasiaa'
             })
 
+            console.log(result.body)
             expect(result.status).toBe(200)
             expect(result.body.data.username).toBe('Chairuly')
     })

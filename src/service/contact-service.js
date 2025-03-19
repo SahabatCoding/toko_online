@@ -21,7 +21,7 @@ const create = async(user, req)=>{
 }
 
 const get = async (user, contactId)=>{
-    const contact = validate(getContactValidation, contactId)
+    contactId = validate(getContactValidation, contactId)
 
     const findContact = await prismaClient.contact.findUnique({
         where : {
@@ -33,13 +33,16 @@ const get = async (user, contactId)=>{
             first_name : true,
             last_name : true,
             email : true,
-            phone : true
+            phone : true,
+            username : true
         }
     })
 
     if(!findContact){
         throw new ResponseErorr(401, 'Username is not found')
     }
+
+    return findContact
 
 }
 
