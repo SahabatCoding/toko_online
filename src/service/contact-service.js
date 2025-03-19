@@ -37,6 +37,10 @@ const get = async (user, contactId)=>{
         }
     })
 
+    if(!findContact){
+        throw new ResponseErorr(401, 'Username is not found')
+    }
+
 }
 
 export default{
