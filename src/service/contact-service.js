@@ -52,7 +52,7 @@ const update = async (user, req)=>{
     const countContact = await prismaClient.contact.count({
         where :{
             username : user,
-            contact : contact.id
+            id : contact.id
         }
     })
 
@@ -71,6 +71,7 @@ const update = async (user, req)=>{
             phone : contact.phone
         },
         select :{
+            id : true,
             first_name : true,
             last_name : true,
             email : true,

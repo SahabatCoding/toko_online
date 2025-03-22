@@ -109,3 +109,51 @@ describe('GET /api/contacts/:contactId',()=>{
                     
                 })
     })
+
+describe('PUT /api/contacts/:contactId',()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+        await createContactTest()
+    })
+
+    afterEach(async()=>{
+        await removeContactTest()
+        await removeUserTest()
+    })
+
+    it('should can update contacts',async ()=>{
+        const contactId = await findContactTest()
+        const result = await supertest(web)
+            .put(`/api/contacts/` + `${contactId.id}`)
+            .set('Authorization', 'test')
+            .send({
+                first_name : 'Daniel',
+                last_name : 'Chris',
+                email : 'Daniel@gmail.com',
+                phone : '0897'
+            })
+        console.log(result.body)
+        expect(result.status).toBe(200)
+        expect(result.body.data.first_name).toBe('Daniel')
+        expect(result.body.data.last_name).toBe('Chris')
+        expect(result.body.data.email).toBe('Daniel@gmail.com')
+        expect(result.body.data.phone).toBe('0897')
+
+    })
+
+    it('should reject update contacts is wrong',async ()=>{
+        const contactId = await findContactTest()
+        const result = await supertest(web)
+            .put(`/api/contacts/` + `salah`)
+            .set('Authorization', 'test')
+            .send({
+                first_name : 'Daniel',
+                last_name : 'Chris',
+                email : 'Daniel@gmail.com',
+                phone : '0897'
+            })
+        console.log(result.body)
+        expect(result.status).toBe(400)
+
+    })
+})

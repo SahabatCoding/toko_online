@@ -10,6 +10,7 @@ const createContactValidation = Joi.object({
 const getContactValidation = Joi.number().positive().required()
 
 const updateContactValidation  = Joi.object({
+    id : Joi.number().positive().required(),
     first_name : Joi.string().max(100).optional(),
     last_name : Joi.string().max(100).optional(),
     email : Joi.string().max(100).email().optional(),
