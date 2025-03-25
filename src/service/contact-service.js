@@ -1,5 +1,5 @@
 import { validate } from "../validation/validation.js"
-import { createContactValidation, getContactValidation, updateContactValidation } from "../validation/contact-validation.js"
+import { createContactValidation, getContactValidation, searchContactValidation, updateContactValidation } from "../validation/contact-validation.js"
 import { prismaClient } from "../application/database.js"
 import { ResponseErorr } from "../error/response-error.js"
 
@@ -80,8 +80,37 @@ const update = async (user, req)=>{
     })
 }
 
+const remove = async (user, contactId)=>{
+    contactId = validate(getContactValidation, contactId)
+
+    const countContact = await prismaClient.contact.count({
+        where :{
+            id : contactId,
+            username : user
+        }
+    })
+
+    if(countContact !== 1){
+        throw new ResponseErorr(401,'contact is not found')
+    }
+
+    return prismaClient.contact.delete({
+        where :{
+            id : contactId
+        }
+    })
+}
+
+const search = async(user, request)=>{
+    request = validate(searchContactValidation, request)
+
+    const skip = (request.page - 1) * request.size 
+}
+
+
 export default{
     create,
     get,
-    update
+    update,
+    remove
 }
