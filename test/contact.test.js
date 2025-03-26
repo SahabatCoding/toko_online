@@ -157,3 +157,33 @@ describe('PUT /api/contacts/:contactId',()=>{
 
     })
 })
+
+describe('DELETE /api/contacts/:contactId',()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+        await createContactTest()
+    })
+    afterEach(async()=>{
+        await removeContactTest()
+        await removeUserTest()
+    })
+
+    it('should can remove contact users',async()=>{
+        const contactId = await findContactTest()
+        const result = await supertest(web)
+            .delete('/api/contacts/' + contactId.id)
+            .set('Authorization', 'test')
+
+        expect(result.status).toBe(200)
+        expect(result.body.data).toBe('OK')
+    })
+
+    it('should reject remove contact users if invalid',async()=>{
+        const contactId = await findContactTest()
+        const result = await supertest(web)
+            .delete('/api/contacts/' + '1')
+            .set('Authorization', 'test')
+
+        expect(result.status).toBe(401)
+    })
+})
