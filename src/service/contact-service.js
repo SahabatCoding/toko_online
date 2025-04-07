@@ -104,7 +104,55 @@ const remove = async (user, contactId)=>{
 const search = async(user, request)=>{
     request = validate(searchContactValidation, request)
 
-    const skip = (request.page - 1) * request.size 
+    const skip = (request.page - 1) * request.size
+
+    const filters = []
+
+    filters.push({
+        username : user.username
+    })
+
+    if(request.name){
+        filters.push({
+            OR : [
+                {
+                    first_name : {
+                        contains : request.name
+                    }
+                },
+                {
+                    last_name : {
+                        contains : request.name
+                    }
+                }
+            ]
+        })
+    }
+
+    if (request.email){
+        filters.push({
+            email : {
+                contains : request.email
+            }
+        })
+    }
+
+    if (request.phone){
+        filters.push({
+            phone : {
+                contains : request.phone
+            }
+        })
+    }
+
+    const contacts = await prismaClient.contact.findMany({
+        where :{
+            AND : filters
+        },
+        take : request.size,
+        skip : skip
+    })
+
 }
 
 
