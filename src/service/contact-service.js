@@ -153,6 +153,21 @@ const search = async(user, request)=>{
         skip : skip
     })
 
+    const totalItems = await prismaClient.contact.count({
+        where :{
+            AND : filters
+        }
+    })
+
+    return {
+        data : contacts,
+        paging :{
+            page : request.page,
+            total_item : totalItems,
+            total_page : Math.ceil(totalItems / request.page)
+        }
+    }
+
 }
 
 
@@ -160,5 +175,6 @@ export default{
     create,
     get,
     update,
-    remove
+    remove,
+    search
 }
