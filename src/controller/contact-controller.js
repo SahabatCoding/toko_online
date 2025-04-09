@@ -78,5 +78,6 @@ export default{
     create,
     get,
     update,
-    remove
+    remove,
+    search
 }
