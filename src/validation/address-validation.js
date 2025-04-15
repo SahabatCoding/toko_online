@@ -1,6 +1,6 @@
 import Joi from 'joi'
 
-const addressCreateValidation = Joi.object({
+const createAddressValidation = Joi.object({
     street : Joi.string().max(100).required(),
     city : Joi.string().max(100).required(),
     province : Joi.string().max(100).required(),
@@ -9,5 +9,5 @@ const addressCreateValidation = Joi.object({
 })
 
 export{
-    addressCreateValidation
+    createAddressValidation
 }
