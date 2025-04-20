@@ -48,6 +48,6 @@ const create = async (user, contactId, req) =>{
     })
 }
 
-export{
+export default{
     create
 }
