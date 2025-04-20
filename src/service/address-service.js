@@ -23,21 +23,31 @@ const checkContactMustExists = async(user, contactId) =>{
 }
 
 const create = async (user, contactId, req) =>{
-    contactId = validate(getContactValidation)
-    const address = validate(createAddressValidation)
+    contactId = await checkContactMustExists(user, contactId)
+
+    const address = validate(createAddressValidation, req)
     address.contact_id = contactId
 
-    const countContact = await prismaClient.contact.count({
-        where : {
-            id : contactId,
-            username : user.username    
+    return prismaClient.address.create({
+        data :{
+            street : address.street,
+            city : address.city,
+            province : address.province,
+            country : address.country,
+            postal_code : address.postal_code,
+            contact_id : address.contact_id
+        },
+        select :{
+            id : true,
+            street : true,
+            city : true,
+            province : true,
+            country : true,
+            postal_code : true
         }
     })
+}
 
-    if(countContact !== 1){
-        throw new ResponseErorr(401 , 'contact is not found')
-    }
-
-    return prismaClient.address.create
-                       
+export{
+    create
 }
