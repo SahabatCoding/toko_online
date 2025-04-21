@@ -62,10 +62,21 @@ const createManyContact = async()=>{
     }
 }
 
+const removeAddressTest = async()=>{
+    return prismaClient.address.deleteMany({
+        where :{
+            contact :{
+                username : "Chairuly"
+            }
+        }
+    })
+}
+
 export {
     removeUserTest,
     createUserTest,
     removeContactTest,
     createContactTest,
-    findContactTest
+    findContactTest,
+    removeAddressTest
 }
