@@ -1,6 +1,6 @@
 import { prismaClient } from "../application/database.js"
 import { ResponseErorr } from "../error/response-error.js"
-import { createAddressValidation } from "../validation/address-validation.js"
+import { createAddressValidation, getAddressValidation } from "../validation/address-validation.js"
 import { getContactValidation } from "../validation/contact-validation.js"
 import { validate } from "../validation/validation.js"
 
@@ -41,6 +41,33 @@ const create = async (user, contactId, req) =>{
     })
 }
 
+const get = async(user, contactId, addressId)=>{
+    contactId = await checkContactMustExists(user, contactId)
+    addressId = validate(getAddressValidation, addressId)
+
+     const findAddress = await prismaClient.address.findUnique({
+        where :{
+            id : addressId,
+            contact_id : contactId
+        },
+        select:{
+            id : true,
+            street : true,
+            city : true,
+            province : true,
+            country : true,
+            postal_code : true
+        }
+     })
+
+     if(!findAddress){
+        throw new ResponseErorr(404, 'Address is not found')
+     }
+    
+    return findAddress
+}
+
 export default{
-    create
+    create,
+    get
 }
