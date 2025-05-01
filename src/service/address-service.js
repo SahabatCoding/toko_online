@@ -67,6 +67,10 @@ const get = async(user, contactId, addressId)=>{
     return findAddress
 }
 
+const update = async()=>{
+    
+}
+
 export default{
     create,
     get
