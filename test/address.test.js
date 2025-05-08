@@ -1,5 +1,5 @@
 import supertest from "supertest"
-import { createContactTest, createUserTest, findContactTest, removeAddressTest, removeContactTest, removeUserTest } from "./test-util.js"
+import { createAddressTest, createContactTest, createUserTest, findContactTest, getAddressTest, removeAddressTest, removeContactTest, removeUserTest } from "./test-util.js"
 import { web } from "../src/application/web.js"
 
 describe('POST /api/contact/:contactId/addresses',()=>{
@@ -49,5 +49,27 @@ describe('POST /api/contact/:contactId/addresses',()=>{
         })
 
         expect(result.status).toBe(400)
+    })
+})
+
+describe('GET /api/contacts/:contactId/addresses/:addressesId',()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+        await createContactTest()
+        await createAddressTest()
+    })
+
+    afterEach(async()=>{
+        await removeAddressTest()
+        await removeContactTest()
+        await removeUserTest()
+    })
+
+    it('should can get address', async()=>{
+        const getAddress = await getAddressTest()
+        const result = await supertest(web)
+            .get('/api/contacts/' + getAddress.contact_id + '/addresses/' + getAddress.id)
+            .set('Authorization', 'test')
+        expect(result.status).toBe(200)
     })
 })
