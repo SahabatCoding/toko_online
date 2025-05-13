@@ -61,7 +61,7 @@ const get = async(user, contactId, addressId)=>{
      })
 
      if(!findAddress){
-        throw new ResponseErorr(401, 'Address is not found')
+        throw new ResponseErorr(404, 'Address is not found')
      }
     
     return findAddress

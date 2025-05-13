@@ -21,6 +21,7 @@ userRouter.delete('/api/contacts/:contactId',contactController.remove)
 //contact address
 userRouter.post('/api/contacts/:contactId/addresses', addressController.create)
 userRouter.get('/api/contacts/:contactId/addresses/:addressId',addressController.get)
+userRouter.patch('/api/contacts/:contactId/addresses/:addressId',addressController.update)
 
 export{
     userRouter

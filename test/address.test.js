@@ -70,6 +70,24 @@ describe('GET /api/contacts/:contactId/addresses/:addressesId',()=>{
         const result = await supertest(web)
             .get('/api/contacts/' + getAddress.contact_id + '/addresses/' + getAddress.id)
             .set('Authorization', 'test')
+
         expect(result.status).toBe(200)
+        expect(result.body.data.street).toBe('Jln Haji naim')
+        expect(result.body.data.city).toBe('Tangsel')
+        expect(result.body.data.province).toBe('Banten')
+        expect(result.body.data.country).toBe('Indonesia')
+        expect(result.body.data.postal_code).toBe('15313')
+        
     })
+
+    it('should can reject if contact or address not found', async()=>{
+        const getAddress = await getAddressTest()
+        const result = await supertest(web)
+            .get('/api/contacts/' + getAddress.contact_id + '/addresses/' + 6)
+            .set('Authorization', 'test')
+
+            expect(result.status).toBe(404)
+    })
+
+
 })
