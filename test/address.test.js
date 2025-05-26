@@ -88,6 +88,56 @@ describe('GET /api/contacts/:contactId/addresses/:addressesId',()=>{
 
             expect(result.status).toBe(404)
     })
+})
 
 
+describe('PATCH /api/contacts/:contactId/addresses/:addressId', ()=>{
+    beforeEach(async()=>{
+        await createUserTest()
+        await createContactTest()
+        await createAddressTest()
+    })
+
+    afterEach(async()=>{
+        await removeAddressTest()
+        await removeContactTest()
+        await removeUserTest()
+    }) 
+    
+    it('should can update address', async()=>{
+        const getAddress = await getAddressTest()
+        const result = await supertest(web)
+            .patch('/api/contacts/'+ getAddress.contact_id + '/addresses/' + getAddress.id)
+            .set('Authorization', 'test')
+            .send({
+                street : 'hai',
+                city : 'hai',
+                province : 'hai',
+                country : 'hai',
+                postal_code : 'hai'
+            })
+        console.log(result.body)
+        expect(result.status).toBe(200)
+        expect(result.body.data.street).toBe('hai')
+        expect(result.body.data.city).toBe('hai')
+        expect(result.body.data.province).toBe('hai')
+        expect(result.body.data.country).toBe('hai')        
+        expect(result.body.data.postal_code).toBe('hai')
+    })
+
+    it('should can reject if update address is not found',async()=>{
+        const getAddress = await getAddressTest()
+        const result = await supertest(web)
+            .patch('/api/contacts/' + getAddress.contact_id + '/addresses/' + 22)
+            .set('Authorization', 'test')
+            .send({
+                street : 'hai',
+                city : 'hai',
+                province : 'hai',
+                country : 'hai',
+                postal_code : 'hai'
+            })
+        console.log(result.body)
+        expect(result.status).toBe(404)
+    })
 })

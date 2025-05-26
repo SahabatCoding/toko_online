@@ -72,7 +72,7 @@ const update = async(user, contactId, req)=>{
 
     const address = validate(updateAddressValidation, req)
 
-    const countAddress = prismaClient.address.count({
+    const countAddress = await prismaClient.address.count({
         where :{
             id : address.id,
             contact_id : contactId
